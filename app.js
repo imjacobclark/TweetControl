@@ -4,7 +4,7 @@ const session = require("express-session");
 const loginWithTwitter = require("./src/login");
 const actions = require("./src/tweetActions");
 
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 const domain = process.env.DOMAIN;
 
 const app = express();
