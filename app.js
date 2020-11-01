@@ -27,7 +27,7 @@ setInterval(() => {
   for (const [key, user] of Object.entries(connectedClients)) {
     actions.deleteAllTweetsButTodays(user, { json: () => {}});
   }
-}, 100)
+}, 900000)
 
 app.use(session(sess));
 
