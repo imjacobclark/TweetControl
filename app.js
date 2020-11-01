@@ -4,7 +4,7 @@ const session = require("express-session");
 const loginWithTwitter = require("./src/login");
 const actions = require("./src/tweetActions");
 
-const port = (process.env.port = 3000);
+const port = process.env.port || 3000;
 const domain = process.env.DOMAIN;
 
 const app = express();
@@ -13,6 +13,7 @@ const sess = {
   secret: process.env.SESSION_SECRET,
   saveUninitialized: true,
   resave: false,
+  cookie: {},
 };
 
 if (process.env.ENV === "production") {
@@ -27,7 +28,7 @@ app.get("/", (req, res) => {
     actions.deleteAllTweets(req.session.user, res);
   } else {
     return res.json({
-      login: `${process.env.DOMAIN}:${process.env.PORT}/login`,
+      login: `${process.env.DOMAIN}/login`,
     });
   }
 });
@@ -41,5 +42,5 @@ app.get("/callback", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at ${domain}:${port}`);
+  console.log(`Example app listening at ${domain}`);
 });

@@ -3,7 +3,7 @@ const LoginWithTwitter = require("login-with-twitter");
 const loginWithTwitter = new LoginWithTwitter({
   consumerKey: process.env.CONSUMER_KEY,
   consumerSecret: process.env.CONSUMER_SECRET,
-  callbackUrl: `${process.env.DOMAIN}:${process.env.PORT}/callback`,
+  callbackUrl: `${process.env.DOMAIN}/callback`,
 });
 
 module.exports = {
