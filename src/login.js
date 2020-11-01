@@ -1,4 +1,5 @@
 const LoginWithTwitter = require("login-with-twitter");
+const { v4: uuidv4 } = require('uuid');
 
 const loginWithTwitter = new LoginWithTwitter({
   consumerKey: process.env.CONSUMER_KEY,
@@ -13,8 +14,7 @@ module.exports = {
       return res.redirect(url);
     });
   },
-
-  callback: (req, res) => {
+  callback: (req, res, connectedClients) => {
     loginWithTwitter.callback(
       {
         oauth_token: req.query.oauth_token,
@@ -22,8 +22,12 @@ module.exports = {
       },
       req.session.tokenSecret,
       (err, user) => {
+        const uuid = uuidv4();
         delete req.session.tokenSecret;
-        req.session.user = user;
+
+        connectedClients[uuid] = user;
+
+        req.session.user = uuid;
 
         return res.redirect("/");
       }

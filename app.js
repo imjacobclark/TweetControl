@@ -16,16 +16,47 @@ const sess = {
   cookie: {},
 };
 
+const connectedClients = {};
+
 if (process.env.ENV === "production") {
   app.set("trust proxy", 1);
   sess.cookie.secure = true;
 }
 
+setInterval(() => {
+  for (const [key, user] of Object.entries(connectedClients)) {
+    actions.deleteAllTweetsButTodays(user, { json: () => {}});
+  }
+}, 100)
+
 app.use(session(sess));
 
 app.get("/", (req, res) => {
   if (req.session.user) {
-    actions.deleteAllTweets(req.session.user, res);
+    return res.json({
+      deleteAllTweets: `${domain}/deleteAllTweets`,
+      deleteAllTweetsButTodays: `${domain}/deleteAllTweetsButTodays`
+    });
+  }else {
+    return res.json({
+      login: `${process.env.DOMAIN}/login`,
+    });
+  }
+});
+
+app.get("/deleteAllTweets", (req, res) => {
+  if (req.session.user) {
+    actions.deleteAllTweets(connectedClients[req.session.user], res);
+  } else {
+    return res.json({
+      login: `${process.env.DOMAIN}/login`,
+    });
+  }
+});
+
+app.get("/deleteAllTweetsButTodays", (req, res) => {
+  if (req.session.user) {
+    actions.deleteAllTweetsButTodays(connectedClients[req.session.user], res);
   } else {
     return res.json({
       login: `${process.env.DOMAIN}/login`,
@@ -38,7 +69,7 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/callback", (req, res) => {
-  loginWithTwitter.callback(req, res);
+  loginWithTwitter.callback(req, res, connectedClients);
 });
 
 app.listen(port, () => {
