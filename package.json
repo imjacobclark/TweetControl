@@ -1,0 +1,20 @@
+{
+  "name": "TweetControl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "pretty": "npx prettier --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "login-with-twitter": "^1.2.3",
+    "prettier": "^2.1.2",
+    "twitter": "^1.7.1"
+  }
+}
